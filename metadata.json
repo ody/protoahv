@@ -1,0 +1,23 @@
+{
+  "name": "ody-protoahv",
+  "version": "0.1.0",
+  "author": "ody",
+  "summary": "Prototype bolt tasks to be used on AHV CVM",
+  "license": "Apache-2.0",
+  "source": "https://github.com/ody/protoahv",
+  "dependencies": [
+
+  ],
+  "operatingsystem_support": [
+
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.7.0 < 6.0.0"
+    }
+  ],
+  "pdk-version": "1.2.1",
+  "template-url": "https://github.com/puppetlabs/pdk-module-template",
+  "template-ref": "heads/master-0-g6d7eb73"
+}

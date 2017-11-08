@@ -1,0 +1,39 @@
+{
+  "puppet_task_version": 1,
+  "supports_noop": false,
+  "description": "Clones a AHV virtual machine using Acropolis CLI",
+  "parameters": {
+    "name": {
+      "description": "Name of resulting VM (default: bolt-$RANDOM)",
+      "type": "String[1]"
+    },
+    "source": {
+      "description": "Name of source VM to clone",
+      "type": "String[1]"
+    },
+    "cores": {
+      "description": "Number of cores per vcpu of resulting VM (default: 1)",
+      "type": "Integer"
+    },
+    "vcpus": {
+      "description": "Number of vcpus of resulting VM (default: 1)",
+      "type": "Integer"
+    },
+    "ram": {
+      "description": "Number of Megabytes of ram of resulting VM (default: 1024)",
+      "type": "Integer"
+    },
+    "key": {
+      "description": "SSH key that will assigned to the 'nutanix' user",
+      "type": "String[1]"
+    },
+    "domain": {
+      "description": "Domain name of new VM (default: local)",
+      "type": "String[1]"
+    },
+    "container": {
+      "description": "Storage container where VM is suppose to be stored (default: default)",
+      "type": "String[1]"
+    }
+  }
+}
