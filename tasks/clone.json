@@ -1,11 +1,11 @@
 {
-  "puppet_task_version": 1,
   "supports_noop": false,
   "description": "Clones a AHV virtual machine using Acropolis CLI",
+  "input_method": "environment",
   "parameters": {
     "name": {
       "description": "Name of resulting VM (default: bolt-$RANDOM)",
-      "type": "String[1]"
+      "type": "Optional[String[1]]"
     },
     "source": {
       "description": "Name of source VM to clone",
@@ -17,7 +17,7 @@
     },
     "vcpus": {
       "description": "Number of vcpus of resulting VM (default: 1)",
-      "type": "Integer"
+      "type": "Optional[Integer]"
     },
     "ram": {
       "description": "Number of Megabytes of ram of resulting VM (default: 1024)",
@@ -29,7 +29,11 @@
     },
     "domain": {
       "description": "Domain name of new VM (default: local)",
-      "type": "String[1]"
+      "type": "Optional[String[1]]"
+    },
+    "userdata": {
+      "description": "Domain name of new VM (default: local)",
+      "type": "Optional[String[1]]"
     },
     "container": {
       "description": "Storage container where VM is suppose to be stored (default: default)",

@@ -1,0 +1,19 @@
+<%- |
+      String  $name,
+      String  $key,
+| -%>
+#cloud-config
+users:
+  - name: nutanix
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    ssh-authorized-keys:
+      - <%= $key %>
+    lock-passwd: false
+    passwd: RANDOM
+hostname: <%= $name %>
+packages:
+ - curl
+runcmd:
+ - echo 10.16.23.15 puppet puppet.local puppet.ops.puppetlabs.net >> /etc/hosts
+ - curl -k https://puppet:8140/packages/current/install.bash | bash
+ - /opt/puppetlabs/bin/puppet agent -t --waitforcert

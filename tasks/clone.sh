@@ -28,53 +28,54 @@
 #
 
 # Set a bunch of defaults
-if [ -n $PT_name]; then
-  $NAME = $PT_name
+if [[ -z ${PT_name+x} ]]; then
+  export NAME="bolt-${RANDOM}"
 else
-  $NAME = "bolt-${RANDOM}"
+  export NAME="$PT_name"
 fi
 
-if [ -n $PT_domain]; then
-  $DOMAIN = $PT_domain
+if [[ -z ${PT_domain+x} ]]; then
+  export DOMAIN="local"
 else
-  $DOMAIN = "local"
+  export DOMAIN="$PT_domain"
 fi
 
-if [ -n $PT_ram]; then
-  $RAM = $PT_ram
+if [[ -z ${PT_ram+x} ]]; then
+  export RAM="1024"
 else
-  $RAM = "1024"
+  export RAM="$PT_ram"
 fi
 
-if [ -n $PT_cores]; then
-  $CORES = $PT_cores
+if [[ -z ${PT_cores+x} ]]; then
+  export CORES="1"
 else
-  $CORES = "1"
+  export CORES="$PT_cores"
 fi
 
-if [ -n $PT_vcpus]; then
-  $VCPUS = $PT_vcpus
+if [[ -z ${PT_vcpus+x} ]]; then
+  export VCPUS="1"
 else
-  $VCPUS = "1"
+  export VCPUS="$PT_vcpus"
 fi
 
-if [ -n $PT_container]; then
-  $CONTAINER = $PT_container
+if [[ -z ${PT_container+x} ]]; then
+  export CONTAINER="default"
 else
-  $CONTAINER = "default"
+  export CONTAINER="$PT_container"
 fi
 
 # Fail if some required data is not set
-if [ -z $PT_key ]; then
+if [[ -z ${PT_key+x} ]]; then
  echo "Setting SSH key is required"
  exit 1
 fi
 
-if [ -z $PT_source ]; then
+if [[ -z ${PT_source+x} ]]; then
  echo "Setting name of source VM is required"
  exit 1
 fi
 
+if [[ -z ${PT_userdata+x} ]]; then
 cat <<EOF > /tmp/userdata-$NAME.yaml
 #cloud-config
 users:
@@ -85,9 +86,14 @@ users:
     lock-passwd: false
     passwd: RANDOM
 hostname: $NAME
-fqdn: $NAME.$DOMIAN
 EOF
+else
+cat <<EOF > /tmp/userdata-$NAME.yaml
+$PT_userdata
+EOF
+fi
 
-acli uhura.vm.clone_with_customize $NAME clone_from_vm=$PT_source cloudinit_userdata_path=file:///tmp/userdata-$NAME.yaml memory="${RAM}M" num_cores_per_vcpu=$CORES num_vcpus=$VCPUS container=$CONTAINER
+/usr/local/nutanix/bin/acli -o json uhura.vm.clone_with_customize $NAME clone_from_vm=$PT_source cloudinit_userdata_path=file:///tmp/userdata-$NAME.yaml memory="${RAM}M" num_cores_per_vcpu=$CORES num_vcpus=$VCPUS container=$CONTAINER
+/usr/local/nutanix/bin/acli -o json vm.on $NAME
 
-rm /tmp/userdata-$PT_name.yaml
+rm /tmp/userdata-$NAME.yaml
